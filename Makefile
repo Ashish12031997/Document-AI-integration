@@ -25,7 +25,7 @@ clean: down
 
 # Remove and reinstall all dependencies
 reinstall: clean
-	docker-compose build
+	docker-compose up
 	docker-compose run --rm web pip install --no-cache-dir -r requirements.txt
 
 # Run database scripts (assuming a script located at ./scripts/init_db.py)

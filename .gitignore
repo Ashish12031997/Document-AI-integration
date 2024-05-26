@@ -7,6 +7,8 @@ dist/
 build/
 *.egg-info/
 *.egg
+.env
+uploads/
 
 # FastAPI
 /.vscode
