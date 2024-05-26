@@ -1,0 +1,21 @@
+# Python
+*.pyc
+__pycache__/
+venv/
+env/
+dist/
+build/
+*.egg-info/
+*.egg
+
+# FastAPI
+/.vscode
+/.mypy_cache
+/.pytest_cache
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+.settings/
+*.sublime-workspace
+*.sublime-project
