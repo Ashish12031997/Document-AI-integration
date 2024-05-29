@@ -13,7 +13,7 @@ async def read_status():
 
 
 @router.post("/file_upload")
-async def file_upload(file: UploadFile = File(...)):
+def file_upload(file: UploadFile = File(...)):
     upload_folder = "app/uploads/"
     os.makedirs(upload_folder, exist_ok=True)
     # TODO: store the file in any cloud storage here
@@ -30,8 +30,7 @@ async def file_upload(file: UploadFile = File(...)):
         os.getenv("PROCESSOR_VERSION"),
     )
 
-    document = await document_ai.process_document(
+    document = document_ai.process_document(
         "app/uploads/" + file.filename, "application/pdf"
     )
-    # print(document)
-    return {"filename": file.filename}
+    return {"document": document}
