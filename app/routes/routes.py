@@ -21,8 +21,6 @@ def file_upload(file: UploadFile = File(...)):
     with open("app/uploads/" + file.filename, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
 
-    # TODO: perform operation with file and then delete it
-
     document_ai = GoogleDocumentAI(
         os.getenv("PROJECT_ID"),
         os.getenv("LOCATION"),
@@ -33,4 +31,9 @@ def file_upload(file: UploadFile = File(...)):
     document = document_ai.process_document(
         "app/uploads/" + file.filename, "application/pdf"
     )
-    return {"document": document}
+    # Delete the file
+    try:
+        os.remove("app/uploads/" + file.filename)
+    except OSError as e:
+        print(f"Error: {file_path} : {e.strerror}")
+    return document

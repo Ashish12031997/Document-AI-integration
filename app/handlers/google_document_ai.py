@@ -78,16 +78,25 @@ class GoogleDocumentAI:
         result = client.process_document(request=request)
         res_entities = []
         for entity in result.document.entities:
-
-            res_entities.append(
-                {
-                    "type": entity.type_,
-                    "mention_text": entity.mention_text,
-                    "mention_id": entity.mention_id,
-                    "confidence": entity.confidence,
-                    "bounding_bobox": entity.page_anchor.page_refs.bounding_poly.normalized_vertices,
-                    # Add other fields as needed
-                }
-            )
+            bounding_boxes = []
+            if entity.page_anchor:
+                for ref in entity.page_anchor.page_refs:
+                    if ref.bounding_poly:
+                        vertices = []
+                        for vertex in ref.bounding_poly.normalized_vertices:
+                            vertices.append({"x": vertex.x, "y": vertex.y})
+                        bounding_boxes.append(vertices)
+                    else:
+                        print("No bounding poly detected")
+                res_entities.append(
+                    {
+                        "type": entity.type_,
+                        "mention_text": entity.mention_text,
+                        "mention_id": entity.mention_id,
+                        "confidence": entity.confidence,
+                        "bounding_boxes": bounding_boxes,
+                        # Add other fields as needed
+                    }
+                )
 
         return res_entities
