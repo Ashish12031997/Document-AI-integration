@@ -59,14 +59,12 @@ class GoogleDocumentAI:
         client = documentai.DocumentProcessorServiceClient(
             credentials=self.credentials, client_options=self.api_endpoint
         )
-
         name = client.processor_path(self.project_id, self.location, self.processor_id)
         # Read the file into memory
         with open(file_path, "rb") as image:
             image_content = image.read()
 
         # # Configure the process request
-        print(f"Request: going to process {file_path}")
         request = documentai.ProcessRequest(
             name=name,
             raw_document=documentai.RawDocument(
@@ -98,5 +96,4 @@ class GoogleDocumentAI:
                         # Add other fields as needed
                     }
                 )
-
         return res_entities
