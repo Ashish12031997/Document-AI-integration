@@ -21,3 +21,8 @@ uploads/
 .settings/
 *.sublime-workspace
 *.sublime-project
+Sample Files
+test
+train1
+combined
+.venv
