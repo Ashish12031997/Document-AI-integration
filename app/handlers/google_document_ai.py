@@ -37,6 +37,16 @@ class GoogleDocumentAI:
             "api_endpoint": f"{self.location}-documentai.googleapis.com"
         }
 
+    def page_refs_to_string(
+        self,
+        page_refs: Sequence[documentai.Document.PageAnchor.PageRef],
+    ) -> str:
+        pages = [str(int(page_ref.page) + 1) for page_ref in page_refs]
+        if len(pages) == 1:
+            return f"page {pages[0]} is"
+        else:
+            return f"pages {', '.join(pages)} are"
+
     def process_document(
         self,
         file_path: str,
@@ -75,8 +85,17 @@ class GoogleDocumentAI:
         )
         result = client.process_document(request=request)
         res_entities = []
+        # print(result.document.text)
         for entity in result.document.entities:
             bounding_boxes = []
+            conf_percent = f"{entity.confidence:.1%}"
+            pages_range = self.page_refs_to_string(entity.page_anchor.page_refs)
+            if entity.type_:
+                print(
+                    f"{conf_percent} confident that {pages_range} a '{entity.type_}' subdocument."
+                )
+            else:
+                print(f"{conf_percent} confident that {pages_range} a subdocument.")
             if entity.page_anchor:
                 for ref in entity.page_anchor.page_refs:
                     if ref.bounding_poly:
